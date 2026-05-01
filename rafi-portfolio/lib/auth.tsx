@@ -9,8 +9,8 @@ interface AuthContextType {
 }
 
 const AuthContext = createContext<AuthContextType>({
-  isLoggedIn: true,
-  login: () => true,
+  isLoggedIn: false,
+  login: () => false,
   logout: () => {},
 });
 
@@ -20,7 +20,7 @@ const ADMIN_PASSWORD = "admin123";
 // ────────────────────────────────────────────────────
 
 export function AuthProvider({ children }: { children: ReactNode }) {
-  const [isLoggedIn, setIsLoggedIn] = useState(true);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   // Persist login across page refreshes via sessionStorage
   useEffect(() => {
