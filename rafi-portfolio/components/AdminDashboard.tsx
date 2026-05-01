@@ -9,6 +9,7 @@ interface AdminProps {
   onAdd: (p: Omit<Project, "id">) => void;
   onUpdate: (p: Project) => void;
   onDelete: (id: number) => void;
+  onLogout?: () => void;
 }
 
 const CATEGORIES: Category[] = ["Branding", "Typography", "Illustrations"];
@@ -21,7 +22,7 @@ const CAT_STYLE: Record<Category, { bg: string; color: string }> = {
 
 const emptyForm = { title: "", category: "Branding" as Category, imageUrl: "", description: "" };
 
-export default function AdminDashboard({ projects, onAdd, onUpdate, onDelete }: AdminProps) {
+export default function AdminDashboard({ projects, onAdd, onUpdate, onDelete, onLogout }: AdminProps) {
   const [form, setForm] = useState(emptyForm);
   const [editingId, setEditingId] = useState<number | null>(null);
   const [toast, setToast] = useState("");
@@ -51,28 +52,38 @@ export default function AdminDashboard({ projects, onAdd, onUpdate, onDelete }: 
 
   const cancelEdit = () => { setEditingId(null); setForm(emptyForm); };
 
-  const inputStyle = { background: "var(--bg3)", border: "0.5px solid var(--border)", color: "var(--text)", fontFamily: "inherit" };
+  const inputStyle = { background: "#1a1a1a", border: "0.5px solid #2a2a2a", color: "#f0ede8", fontFamily: "inherit" };
   const inputClass = "w-full rounded-sm text-sm px-3.5 py-2.5 outline-none";
-  const labelStyle: React.CSSProperties = { fontSize: 11, textTransform: "uppercase", letterSpacing: "0.1em", color: "var(--text3)" };
+  const labelStyle: React.CSSProperties = { fontSize: 11, textTransform: "uppercase", letterSpacing: "0.1em", color: "#605850" };
 
   return (
-    <div className="pt-14 min-h-screen">
+    <div style={{ background: "#0a0a0a", minHeight: "100vh" }}>
       {/* Admin Bar */}
       <div className="flex items-center gap-4 px-8 h-11 text-sm"
-        style={{ background: "var(--bg2)", borderBottom: "0.5px solid var(--border)" }}>
-        <LayoutDashboard size={14} style={{ color: "var(--text3)" }} />
-        <span style={{ color: "var(--text3)", fontSize: 11, textTransform: "uppercase", letterSpacing: "0.1em" }}>Dashboard</span>
-        <span style={{ color: "var(--text2)" }}>Rafi Ahmed — Project Manager</span>
-        <span className="ml-auto text-xs" style={{ color: "var(--text3)" }}>{projects.length} projects</span>
+        style={{ background: "#111111", borderBottom: "0.5px solid #2a2a2a" }}>
+        <LayoutDashboard size={14} style={{ color: "#605850" }} />
+        <span style={{ color: "#605850", fontSize: 11, textTransform: "uppercase", letterSpacing: "0.1em" }}>Dashboard</span>
+        <span style={{ color: "#a09890" }}>Rafi Ahmed</span>
+        <span className="ml-auto flex items-center gap-4">
+          <span className="text-xs" style={{ color: "#605850" }}>{projects.length} projects</span>
+          <a href="/" className="text-xs hover:underline" style={{ color: "#605850", textDecoration: "none" }}>← Portfolio</a>
+          {onLogout && (
+            <button onClick={onLogout}
+              className="text-xs px-3 py-1 rounded-sm"
+              style={{ border: "0.5px solid #3a2a2a", color: "#a05050", background: "transparent", cursor: "pointer", fontFamily: "inherit" }}>
+              Sign Out
+            </button>
+          )}
+        </span>
       </div>
 
       <div className="max-w-5xl mx-auto px-8 py-10">
         <div className="grid grid-cols-1 md:grid-cols-[320px_1fr] gap-8 items-start">
 
-          {/* ── ADD / EDIT FORM ── */}
-          <div className="rounded-md p-6" style={{ background: "var(--bg2)", border: "0.5px solid var(--border)" }}>
+          {/* ADD / EDIT FORM */}
+          <div className="rounded-md p-6" style={{ background: "#111111", border: "0.5px solid #2a2a2a" }}>
             <div className="text-xs uppercase tracking-widest mb-5 pb-4"
-              style={{ letterSpacing: "0.1em", color: "var(--text3)", borderBottom: "0.5px solid var(--border)" }}>
+              style={{ letterSpacing: "0.1em", color: "#605850", borderBottom: "0.5px solid #2a2a2a" }}>
               {editingId !== null ? "Edit Project" : "Add New Project"}
             </div>
 
@@ -109,15 +120,15 @@ export default function AdminDashboard({ projects, onAdd, onUpdate, onDelete }: 
 
               <div className="flex gap-2 mt-1">
                 <button onClick={handleSave}
-                  className="flex-1 flex items-center justify-center gap-2 py-2.5 rounded-sm text-sm font-medium transition-opacity hover:opacity-80"
-                  style={{ background: "var(--accent)", color: "#0a0a0a" }}>
+                  className="flex-1 flex items-center justify-center gap-2 py-2.5 rounded-sm text-sm font-medium"
+                  style={{ background: "#e8d5b0", color: "#0a0a0a", border: "none", cursor: "pointer", fontFamily: "inherit" }}>
                   <Plus size={14} />
                   {editingId !== null ? "Update Project" : "Save Project"}
                 </button>
                 {editingId !== null && (
                   <button onClick={cancelEdit}
-                    className="flex items-center justify-center px-3 rounded-sm transition-all hover:opacity-80"
-                    style={{ border: "0.5px solid var(--border2)", color: "var(--text2)" }}>
+                    className="flex items-center justify-center px-3 rounded-sm"
+                    style={{ border: "0.5px solid #3a3a3a", color: "#a09890", background: "transparent", cursor: "pointer" }}>
                     <X size={14} />
                   </button>
                 )}
@@ -125,47 +136,42 @@ export default function AdminDashboard({ projects, onAdd, onUpdate, onDelete }: 
             </div>
           </div>
 
-          {/* ── PROJECT LIST ── */}
-          <div className="rounded-md p-6" style={{ background: "var(--bg2)", border: "0.5px solid var(--border)" }}>
+          {/* PROJECT LIST */}
+          <div className="rounded-md p-6" style={{ background: "#111111", border: "0.5px solid #2a2a2a" }}>
             <div className="text-xs uppercase tracking-widest mb-5 pb-4"
-              style={{ letterSpacing: "0.1em", color: "var(--text3)", borderBottom: "0.5px solid var(--border)" }}>
+              style={{ letterSpacing: "0.1em", color: "#605850", borderBottom: "0.5px solid #2a2a2a" }}>
               Current Projects
             </div>
 
             {projects.length === 0 ? (
-              <p className="text-center py-10 text-sm" style={{ color: "var(--text3)" }}>No projects yet.</p>
+              <p className="text-center py-10 text-sm" style={{ color: "#605850" }}>No projects yet.</p>
             ) : (
               <div className="flex flex-col gap-3">
                 {projects.map((p) => (
                   <div key={p.id} className="flex items-center gap-3 p-3 rounded"
-                    style={{ border: "0.5px solid var(--border)", background: "var(--bg3)" }}>
-                    {/* Thumb */}
+                    style={{ border: "0.5px solid #2a2a2a", background: "#1a1a1a" }}>
                     {p.imageUrl ? (
                       <img src={p.imageUrl} alt={p.title} className="w-12 h-9 rounded object-cover flex-shrink-0"
                         onError={(e) => (e.currentTarget.style.display = "none")} />
                     ) : (
-                      <div className="w-12 h-9 rounded flex-shrink-0" style={{ background: "var(--bg4)" }} />
+                      <div className="w-12 h-9 rounded flex-shrink-0" style={{ background: "#222222" }} />
                     )}
-
-                    {/* Info */}
                     <div className="flex-1 min-w-0">
-                      <div className="text-sm font-medium truncate" style={{ color: "var(--text)" }}>{p.title}</div>
+                      <div className="text-sm font-medium truncate" style={{ color: "#f0ede8" }}>{p.title}</div>
                       <span className="inline-block mt-0.5 px-2 py-0.5 rounded-sm text-xs uppercase"
                         style={{ ...CAT_STYLE[p.category], letterSpacing: "0.06em", fontSize: 10 }}>
                         {p.category}
                       </span>
                     </div>
-
-                    {/* Actions */}
                     <div className="flex gap-1.5 flex-shrink-0">
                       <button onClick={() => startEdit(p)}
-                        className="flex items-center gap-1 px-2.5 py-1 rounded-sm text-xs transition-all hover:opacity-80"
-                        style={{ border: "0.5px solid var(--border)", color: "var(--accent2)" }}>
+                        className="flex items-center gap-1 px-2.5 py-1 rounded-sm text-xs"
+                        style={{ border: "0.5px solid #2a2a2a", color: "#c4a882", background: "transparent", cursor: "pointer", fontFamily: "inherit" }}>
                         <Pencil size={11} /> Edit
                       </button>
                       <button onClick={() => { onDelete(p.id); showToast("Project deleted"); }}
-                        className="flex items-center gap-1 px-2.5 py-1 rounded-sm text-xs transition-all hover:opacity-80"
-                        style={{ border: "0.5px solid var(--border)", color: "#a05050" }}>
+                        className="flex items-center gap-1 px-2.5 py-1 rounded-sm text-xs"
+                        style={{ border: "0.5px solid #2a2a2a", color: "#a05050", background: "transparent", cursor: "pointer", fontFamily: "inherit" }}>
                         <Trash2 size={11} /> Del
                       </button>
                     </div>
@@ -177,10 +183,9 @@ export default function AdminDashboard({ projects, onAdd, onUpdate, onDelete }: 
         </div>
       </div>
 
-      {/* Toast */}
       {toast && (
         <div className="fixed bottom-8 right-8 text-sm px-5 py-3 rounded"
-          style={{ background: "var(--bg3)", border: "0.5px solid var(--border2)", color: "var(--text)", zIndex: 999 }}>
+          style={{ background: "#1a1a1a", border: "0.5px solid #3a3a3a", color: "#f0ede8", zIndex: 999 }}>
           {toast}
         </div>
       )}
