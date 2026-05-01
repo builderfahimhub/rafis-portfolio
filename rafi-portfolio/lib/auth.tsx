@@ -20,7 +20,7 @@ const ADMIN_PASSWORD = "rafi2025";
 // ────────────────────────────────────────────────────
 
 export function AuthProvider({ children }: { children: ReactNode }) {
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState(true);
 
   // Persist login across page refreshes via sessionStorage
   useEffect(() => {
