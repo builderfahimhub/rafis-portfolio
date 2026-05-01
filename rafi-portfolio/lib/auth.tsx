@@ -9,14 +9,14 @@ interface AuthContextType {
 }
 
 const AuthContext = createContext<AuthContextType>({
-  isLoggedIn: false,
-  login: () => false,
+  isLoggedIn: true,
+  login: () => true,
   logout: () => {},
 });
 
 // ── YOUR LOGIN CREDENTIALS ──────────────────────────
-const ADMIN_USERNAME = "rafi";
-const ADMIN_PASSWORD = "rafi2025";
+const ADMIN_USERNAME = "admin";
+const ADMIN_PASSWORD = "admin123";
 // ────────────────────────────────────────────────────
 
 export function AuthProvider({ children }: { children: ReactNode }) {
